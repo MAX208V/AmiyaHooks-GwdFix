@@ -38,5 +38,6 @@ android {
 }
 
 dependencies {
-    compileOnly("de.robv.android.xposed:api:82")
+    // Xposed API 82 不在 Maven Central，直接用随仓库附带的 jar（compileOnly，不打进包）
+    compileOnly(files("libs/api-82.jar"))
 }
