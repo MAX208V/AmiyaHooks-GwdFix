@@ -20,33 +20,35 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      # ubuntu-latest 自带 Android SDK（ANDROID_HOME 已设好），这里只补装 NDK/CMake
+      - name: Install NDK and CMake
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          SDKMANAGER=$(command -v sdkmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager")
+          echo "using $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" "platforms;android-34" "build-tools;34.0.0" "ndk;27.0.12077973" "cmake;3.22.1"
+          ls "$ANDROID_HOME/ndk"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
 
-      - name: Install NDK + CMake
-        run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "ndk;27.0.12077973" "cmake;3.22.1" "platforms;android-34" "build-tools;34.0.0"
-
       - name: Build release
-        run: gradle :app:assembleRelease --stacktrace
+        run: gradle :app:assembleRelease --stacktrace --no-daemon
 
-      # 用 CI 里的 debug keystore 给 release 包签名，产出可直接安装的 APK
       - name: Sign APK
-        id: sign
         run: |
           APK=$(find app/build/outputs/apk/release -name "*.apk" | head -1)
-          echo "apk=$APK" >> $GITHUB_OUTPUT
-          BT=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
+          echo "built: $APK"
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | tail -1)
           $BT/apksigner sign --ks ~/.android/debug.keystore \
             --ks-pass pass:android --key-pass pass:android --ks-key-alias androiddebugkey \
             --out AmiyaHooks-GwdFix-signed.apk "$APK"
           $BT/apksigner verify --print-certs AmiyaHooks-GwdFix-signed.apk | head -5
+          ls -la AmiyaHooks-GwdFix-signed.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
