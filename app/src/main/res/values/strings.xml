@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AmiyaHooks · 古文岛修复</string>
+    <string name="xposed_description">修复古文岛 3.2.0+ 的会员/纯净模式/无限制模式支持（AmiyaHooks 补丁）</string>
+</resources>

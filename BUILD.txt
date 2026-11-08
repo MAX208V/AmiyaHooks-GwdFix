@@ -1,0 +1,6 @@
+没有附带 gradle wrapper 二进制。
+用 Android Studio 打开本目录即可自动生成 wrapper，或安装 gradle 8.7+ 后执行：
+  gradle :app:assembleRelease
+
+环境要求：SDK 34 / NDK 27.0.12077973 / JDK 17
+仅编译 arm64-v8a。
