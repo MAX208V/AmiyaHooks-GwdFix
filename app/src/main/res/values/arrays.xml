@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        默认作用域：模块安装后 LSPosed 会自动勾选这些包名（manifest 里 xposedscope 引用本数组）。
+        古文岛为主目标；古诗文网为同一套 Flutter 代码的姊妹包，一并预选。
+    -->
+    <string-array name="xposed_scope">
+        <item>com.guwendao.gwd</item>
+        <item>com.gushiwen.gsw</item>
+    </string-array>
+</resources>

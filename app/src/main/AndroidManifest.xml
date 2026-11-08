@@ -16,6 +16,10 @@
         <meta-data
             android:name="xposedminversion"
             android:value="93" />
+        <!-- 默认作用域：LSPosed 安装后自动勾选古文岛，无需手动选 -->
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
     </application>
 
 </manifest>
